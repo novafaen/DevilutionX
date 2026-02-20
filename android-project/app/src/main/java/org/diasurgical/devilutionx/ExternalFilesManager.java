@@ -2,6 +2,7 @@ package org.diasurgical.devilutionx;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -56,6 +57,16 @@ public class ExternalFilesManager {
 	}
 
 	private String chooseExternalFilesDirectory(Context context) {
+		File diabloSaves = new File(Environment.getExternalStorageDirectory(), "DiabloSaves");
+		if (!diabloSaves.exists()) {
+			//noinspection ResultOfMethodCallIgnored
+			diabloSaves.mkdirs();
+		}
+
+		if (diabloSaves.exists() && diabloSaves.canWrite()) {
+			return diabloSaves.getAbsolutePath();
+		}
+
 		if (Build.VERSION.SDK_INT >= 19) {
 			File[] externalDirs = context.getExternalFilesDirs(null);
 
